@@ -1,6 +1,15 @@
+
+
 <div id="wrapper">
     <h1>Reddit - Florida Man News</h1>
-    <h2><i>If you can do this...the homework should be no problem.</i></h2>
-    <div id="articles"></div>
+    {{#each dbArticle}}
+    <div id="articles">{{title}}</div>
+    <div>{{link}}</div>
+    {{/each}}
     <div id="notes"></div>
+
 </div>
+
+    <script src="/assets/js/app.js"></script>
+    <script src="/server.js"></script>
+

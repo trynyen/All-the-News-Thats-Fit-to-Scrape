@@ -35,7 +35,9 @@ app.set("view engine", "handlebars");
 mongoose.connect("mongodb://localhost/newsdb", { useNewUrlParser: true });
 
 // Routes
-
+app.get("/", function(req,res){
+   res.send("Welcome to Florida Man Times")
+})
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
@@ -43,20 +45,28 @@ app.get("/scrape", function(req, res) {
     axios.get("https://www.reddit.com/r/FloridaMan/").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
-  
+        console.log($);
       // Now, we grab every h2 within an article tag, and do the following:
       $("article").each(function(i, element) {
         // Save an empty result object
-        var result = {};
-  
+        var result = [];
+        var title = $(element).children().text();
+        // console.log(title);
+        var link = $(element).find("a").attr("href");
+        // console.log(link);
+        result.push({
+            title: title,
+            link: link
+          });
+        
         // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(this)
-          .children("h3")
-          .text();
-        result.link = $(this)
-          .children("a")
-          .attr("href");
-  
+        // result.title = $(this)
+        //   .children("h3")
+        //   .text();
+        // result.link = $(this)
+        //   .children("a")
+        //   .attr("href");
+        console.log(result);
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
           .then(function(dbArticle) {
@@ -80,7 +90,7 @@ app.get("/articles", function(req, res) {
     db.Article.find({})
       .then(function(dbArticle) {
         // If we were able to successfully find Articles, send them back to the client
-        res.json("index",dbArticle);
+        res.render("index", {dbArticle:dbArticle});
       })
       .catch(function(err) {
         // If an error occurred, send it to the client
