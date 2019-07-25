@@ -9,7 +9,6 @@ body { background-color: #F2F6D0 }
   display: inline-block;
   overflow: auto;
   width: 60%;
-  height: 700px;
 }
 #notes {
   float: right;

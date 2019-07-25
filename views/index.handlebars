@@ -1,15 +1,12 @@
 
 
 <div id="wrapper">
-    <h1>Reddit - Florida Man News</h1>
+    <h1>Florida Man Times</h1>
     {{#each dbArticle}}
-    <div id="articles">{{title}}</div>
-    <div>{{link}}</div>
+    <div>--------------------------------------------------------------------------------------------------------------------</div>
+    <div id="articles"><p data-id="{{_id}}">{{title}}</p></div>
+    {{!-- <div>{{link}}</div> --}}
+    <a href="{{link}}" target="_blank">{{link}}</a>
     {{/each}}
     <div id="notes"></div>
-
 </div>
-
-    <script src="/assets/js/app.js"></script>
-    <script src="/server.js"></script>
-
