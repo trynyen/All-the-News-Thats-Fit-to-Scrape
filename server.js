@@ -1,6 +1,8 @@
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var mongojs = require("mongojs");
+
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -128,17 +130,17 @@ app.post("/articles/:id", function (req, res) {
         });
 });
 
-app.post("/saved/:id", function(req,res){
-    db.Article.find({_id:req.params.id})
+app.put("/saved/:id", function(req,res){
+    db.Article.update({_id:req.params.id})
     .then(function(err,data){
         console.log(data)
         if (data.issaved) {
-            db.Article.findOneAndUpdate({_id:req.params.id}, {$set: {issaved: false}}, {new: true}, function(err, data) {
+            db.Article.findOneAndUpdate({}, {$set: {issaved: false}}, {new: true}, function(err, data) {
                 res.redirect("/articles");
             });
         }
         else {
-            db.Article.findOneAndUpdate({_id:req.params.id}, {$set: {issaved: true}}, {new: true})
+            db.Article.findOneAndUpdate({}, {$set: {issaved: true}})
         }
     })
     
@@ -155,6 +157,10 @@ app.get("/saved", function(req, res) {
 	});
 });
 
+// app.post("/delete/:id", function(req,res){
+//     db.Article.remove({_id:req.params.id})
+//     .then()
+// })
 // Start our server so that it can begin listening to client requests.
 app.listen(PORT, function () {
     // Log (server-side) when our server has started

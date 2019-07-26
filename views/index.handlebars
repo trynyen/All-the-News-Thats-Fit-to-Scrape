@@ -10,8 +10,8 @@
     <div>--------------------------------------------------------------------------------------------------------------------</div>
     <div id="articles"><p>{{title}}</p></div>
     <a href="{{link}}" target="_blank">{{link}}</a>
-
-    <button action="/save/{{_id}}" method="POST" class="save" value="">SAVE</button>
+{{!-- action="/save/{{_id}}" method="PUT" --}}
+    <button data-id="{{_id}}" class="save" value="">SAVE</button>
     <button data-id="{{_id}}" class="note" value="">NOTE</button>    
 
     {{/each}}
