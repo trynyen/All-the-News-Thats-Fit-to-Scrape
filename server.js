@@ -131,17 +131,21 @@ app.post("/articles/:id", function (req, res) {
 });
 
 app.put("/saved/:id", function(req,res){
-    db.Article.update({_id:req.params.id})
-    .then(function(err,data){
+    db.Article.findOne({_id:req.params.id})
+    .then(function(data){
         console.log(data)
         if (data.issaved) {
-            db.Article.findOneAndUpdate({}, {$set: {issaved: false}}, {new: true}, function(err, data) {
+            db.Article.findOneAndUpdate({_id:req.params.id}, {issaved: false}, function(err, data) {
                 res.redirect("/articles");
             });
         }
         else {
-            db.Article.findOneAndUpdate({}, {$set: {issaved: true}})
+            db.Article.findOneAndUpdate({_id:req.params.id}, {issaved: true}).then(function(data){
+                res.json(data)
+            })
         }
+    }).catch(function(err){
+        console.error(err)
     })
     
 })

@@ -78,7 +78,7 @@ $(document).on("click", ".save", function () {
     // Run a PUT request to update the note, using what's entered in the inputs
     $.ajax({
         method: "PUT",
-        url: "/saved" + thisId,
+        url: "/saved/" + thisId,
 
     })
         // With that done
