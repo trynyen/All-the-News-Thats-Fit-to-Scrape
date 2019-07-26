@@ -8,9 +8,11 @@
 
     {{#each dbArticle}}
     <div>--------------------------------------------------------------------------------------------------------------------</div>
-    <div id="articles"><p data-id="{{_id}}">{{title}}</p></div>
-    {{!-- <div>{{link}}</div> --}}
+    <div id="articles"><p>{{title}}</p></div>
     <a href="{{link}}" target="_blank">{{link}}</a>
-    <button id="save">SAVE</button>
+
+    <button action="/save/{{_id}}" method="POST" class="save" value="">SAVE</button>
+    <button data-id="{{_id}}" class="note" value="">NOTE</button>    
+
     {{/each}}
 </div>

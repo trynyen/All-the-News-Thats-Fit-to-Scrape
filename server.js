@@ -131,6 +131,7 @@ app.post("/articles/:id", function (req, res) {
 app.post("/saved/:id", function(req,res){
     db.Article.find({_id:req.params.id})
     .then(function(err,data){
+        console.log(data)
         if (data.issaved) {
             db.Article.findOneAndUpdate({_id:req.params.id}, {$set: {issaved: false}}, {new: true}, function(err, data) {
                 res.redirect("/articles");
