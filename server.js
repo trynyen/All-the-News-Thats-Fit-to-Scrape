@@ -161,10 +161,16 @@ app.get("/saved", function(req, res) {
 	});
 });
 
-// app.post("/delete/:id", function(req,res){
-//     db.Article.remove({_id:req.params.id})
-//     .then()
-// })
+app.get("/delete/:id", function(req,res){
+    db.Article.remove({_id:req.params.id}, function(err,data){
+        if (err) {
+            console.log(err)
+          }
+          else {
+            res.json(data);
+          }
+    })
+})
 // Start our server so that it can begin listening to client requests.
 app.listen(PORT, function () {
     // Log (server-side) when our server has started
