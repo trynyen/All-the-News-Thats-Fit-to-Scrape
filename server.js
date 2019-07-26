@@ -31,12 +31,17 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-
+if (process.env.MONGODB_URI) {
+	mongoose.connect("process.env.MONGODB_URI");
+}
+else {
 mongoose.connect("mongodb://localhost/newsdb", { useNewUrlParser: true });
+}
 
 // Routes
 app.get("/", function (req, res) {
-    res.send("Welcome to Florida Man Times")
+    // res.send("Welcome to Florida Man Times")
+    res.redirect("/articles");
 })
 
 // A GET route for scraping the echoJS website
@@ -59,13 +64,6 @@ app.get("/scrape", function (req, res) {
                 link: link
             });
 
-            // Add the text and href of every link, and save them as properties of the result object
-            // result.title = $(this)
-            //   .children("h3")
-            //   .text();
-            // result.link = $(this)
-            //   .children("a")
-            //   .attr("href");
             console.log(result);
             // Create a new Article using the `result` object built from scraping
             db.Article.create(result)
@@ -80,9 +78,11 @@ app.get("/scrape", function (req, res) {
         });
 
         // Send a message to the client
-        res.send("Scrape Complete");
+        res.redirect("/articles");
     });
 });
+
+
 
 // Route for getting all Articles from the db
 app.get("/articles", function (req, res) {
@@ -126,6 +126,32 @@ app.post("/articles/:id", function (req, res) {
             // If an error occurred, send it to the client
             res.json(err);
         });
+});
+
+app.post("/saved/:id", function(req,res){
+    db.Article.find({_id:req.params.id})
+    .then(function(err,data){
+        if (data.issaved) {
+            db.Article.findOneAndUpdate({_id:req.params.id}, {$set: {issaved: false}}, {new: true}, function(err, data) {
+                res.redirect("/articles");
+            });
+        }
+        else {
+            db.Article.findOneAndUpdate({_id:req.params.id}, {$set: {issaved: true}}, {new: true})
+        }
+    })
+    
+})
+
+app.get("/saved", function(req, res) {
+	db.Article.find({issaved: true}, null, {sort: {created: -1}}, function(err, data) {
+		if(data.length === 0) {
+			res.render("404", {message: "You have not saved any article"});
+		}
+		else {
+			res.render("saved", {saved: data});
+		}
+	});
 });
 
 // Start our server so that it can begin listening to client requests.

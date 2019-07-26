@@ -1,12 +1,16 @@
+<a href="/scrape">SCRAPE ARTICLE</a>
+<a href="/saved">SAVED ARTICLE</a>
 
 
 <div id="wrapper">
     <h1>Florida Man Times</h1>
+    <div id="notes"></div>
+
     {{#each dbArticle}}
     <div>--------------------------------------------------------------------------------------------------------------------</div>
     <div id="articles"><p data-id="{{_id}}">{{title}}</p></div>
     {{!-- <div>{{link}}</div> --}}
     <a href="{{link}}" target="_blank">{{link}}</a>
+    <button id="save">SAVE</button>
     {{/each}}
-    <div id="notes"></div>
 </div>
